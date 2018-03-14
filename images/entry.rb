@@ -26,7 +26,7 @@
 require 'rubygems'
 require 'redis'
 require "json"
-
+require "open-uri"
 
 def xputs(s)
     case s[0..2]
@@ -51,12 +51,20 @@ def xputs(s)
     print "\n"
 end
 
+def http_get(uri)
+    result = nil
+    open(uri) do |http|
+        result = http.read
+    end
+    return result
+end
+
 class ResultInfo
     def initialize(code,message)
         @info = {}
         @info[:code] = code
         @info[:message] = message
     
-    def to_string()
-        return 
+    def to_json()
+        @info.to_json
 end
