@@ -59,6 +59,14 @@ def http_get(uri)
     return result
 end
 
+def print_table(data)
+    max_lenth = 0 
+    data.each{|key,val|
+        max_lenth = key.length + val.length if max_lenth < (key.length+val.length)
+    }
+    print max_lenth
+end
+
 class ResultInfo
     def initialize(code,message)
         @info = {}
