@@ -26,6 +26,14 @@ class State(object):
         self.logger.addHandler(stream)
         self.logger.setLevel(level)
 
+def can_build_cluster(replicas , slaves_pre_master):
+    try:
+        if replicas < 3 * (slaves_pre_master+1):
+            return False
+        else:
+            return True
+    except Exception :
+        return False
 
 def verbose_option(f):
     def callback(ctx, param, value):
@@ -74,11 +82,11 @@ def cli():
 @click.option('-a', '--api-server', type=str, prompt="api-server-addr", help="Enter the api server addr")
 @common_option
 def install_command(replicas, slaves_pre_master, api_server):
-    print(replicas)
-    print(slaves_pre_master)
-    print(api_server)
-    print(type(api_server))
-
+    if not can_build_cluster(replicas,slaves_pre_master):
+        click.secho('Wrong arguments! replicas must be greater than equal to (slaves_pre_master+1)*3 ')
+        return False
+    
+    
 
 @cli.command(name="uninstall", help="Uninstall the redis cluster.")
 @common_option
